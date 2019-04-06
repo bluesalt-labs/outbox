@@ -1,0 +1,27 @@
+version: '3.7'
+
+networks:
+  default:
+    name: outbox
+    driver: bridge
+services:
+  app:
+    image: outbox:development
+    container_name: outbox_app
+    build:
+      context: .docker/app
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8080:80"
+      - "443:443"
+  redis:
+    container_name: outbox_redis
+    image: redis:5.0.3-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+volumes:
+  redis_data:
+    name: outbox_redis_data
